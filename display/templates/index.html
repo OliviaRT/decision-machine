@@ -1,0 +1,69 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block coltype %}colM{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+<h2>{% translate 'Decision Machine' %}</h2>
+<div class="container">
+    {% if error %}
+    <p class="errornote">
+        {{ error }}
+    </p>
+    {% endif %}
+    <div style="text-align: center; width:100%; margin:0px auto;">
+        <form action="." method="post">
+
+            {% if alert %}
+                <h1 style="color: #FF4860;">{{ alert }} :<h3>{{ message }}</h3>
+            {% endif %}
+            </h1>
+            <br>
+            {% csrf_token %}
+            Salary: {{ form.salary }}
+            Expenses: {{ form.expenses }}
+            
+            <div style="text-align: center; width:100%;
+                        margin:0px auto;">
+                <button class="button" id="module" name="module" style="height: 30px;">
+                    {% translate 'Calculate' %}
+                </button>
+            </div>
+        </form>
+    
+        <table id="result" style= "float: center; text-align:center; width:50%; margin:0px auto;" >
+            <thead>
+                <tr>
+                    <th style="text-align: center; color: black;" >
+                        {% translate 'Customer color' %}
+                    </th>
+                </tr>
+            </thead>
+            {% if data %}
+            <tbody>
+                <tr>
+                    <td style="background-color: {{data.color}}">
+                        Remanente: ${{data.remainder}}
+                    </td>
+            </tbody>
+            {% else %}
+            <div style="width: 65%; float: center; text-align:center;">
+                <h3>{% translate "No request has been made" %}</h3>
+            </div>
+            {% endif %}
+        </table>
+    
+    </div>
+
+{% endblock %}
